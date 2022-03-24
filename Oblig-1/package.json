@@ -11,5 +11,8 @@
   "description": "",
   "dependencies": {
     "http": "^0.0.1-security"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
