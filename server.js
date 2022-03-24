@@ -1,6 +1,6 @@
 const http = require("http");
 const host = 'localhost';
-const port = 8080;
+const port = process.env.PORT || 80
 
 function handleRequest(request, response) {
     response.writeHead(200);
