@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
-require('dotenv').config();
+// DEV
+//require('dotenv').config();
 
 const IP        = process.env.MONGODB_IP;
 const dbName    = process.env.MONGODB_DB;
