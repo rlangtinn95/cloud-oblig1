@@ -1,18 +1,37 @@
-const APIurl = "/user";
+const APIurl = "https://oblig1ri.herokuapp.com/user";
 
 function clientTimestamp(sentTimestamp) {
 
       var receivedTimestamp = Date.now();
   
       return {client_received_timestamp: receivedTimestamp, client_sent_timestamp: sentTimestamp, client_latency: receivedTimestamp - sentTimestamp}
-  }
+}
 
-function updateUser(firstName, surName, studentID, age, nationality, degree){
-      var data = JSON.stringify({"firstname": firstName, "surname": surName, "student_id": studentID, "age": age, "nationality": nationality, "degree": degree});
+function calculateAndDisplayLatency(clientTimestamps, serverTimestamps, action="") {
+      var roundTrip = clientTimestamps.client_latency - serverTimestamps.server_latency;
+
+      var latencyOutput  = "Round-trip Latency: "+roundTrip+"ms";
+      latencyOutput     += "<br>Server Latency: "+serverTimestamps.server_latency+"ms";
+      latencyOutput     += "<br>Client Latency: "+clientTimestamps.client_latency+"ms";
+
+      if(action)
+            latencyOutput += "<br>Action: "+action;
+
+      document.getElementById("latency").innerHTML = latencyOutput;
+}
+
+async function updateUser(firstName, surName, studentID, age, nationality, degree){
+      var data = JSON.stringify({   "filter": {"student_id": studentID},
+                                    "firstname": firstName,
+                                    "surname": surName,
+                                    "student_id": studentID,
+                                    "age": age,
+                                    "nationality": nationality,
+                                    "degree": degree
+                              });
+
       let dataReceived = ""; 
-      fetch(APIurl, {
-      credentials: "same-origin",
-      mode: "same-origin",
+      await fetch(APIurl, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: data
@@ -26,7 +45,7 @@ function updateUser(firstName, surName, studentID, age, nationality, degree){
             }
       })
       .then(dataJson => {
-            dataReceived = JSON.parse(dataJson);
+            dataReceived = dataJson; // Already parsed for some reason??
       })
       .catch(err => {
             if (err === "server") return
@@ -36,17 +55,17 @@ function updateUser(firstName, surName, studentID, age, nationality, degree){
       return dataReceived;
 }
 
-function readUser(studentID){
+async function deleteUser(studentID){
+      var data = JSON.stringify({"filter": {"student_id": studentID}});
+
       let dataReceived = ""; 
-      fetch("127.0.0.1:5000"+APIurl+"?student_id="+studentID, {
-      credentials: "omit",
-      mode: "no-cors",
-      method: "GET",
-      headers: { "Content-Type": "application/json" }
+      await fetch(APIurl, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: data
       })
       .then(resp => {
             if (resp.status === 200) {
-                  console.log("yeehaw");
                   return resp.json();
             } else {
                   console.log("Status: " + resp.status);
@@ -54,7 +73,29 @@ function readUser(studentID){
             }
       })
       .then(dataJson => {
-            dataReceived = JSON.parse(dataJson);
+            dataReceived = dataJson; // Already parsed for some reason??
+      })
+      .catch(err => {
+            if (err === "server") return
+            console.log(err);
+      });
+
+      return dataReceived;
+}
+
+async function readUser(studentID){
+      let dataReceived = "";
+      await fetch(APIurl+"?student_id="+studentID)
+      .then(resp => {
+            if (resp.status === 200) {
+                  return resp.json();
+            } else {
+                  console.log("Status: " + resp.status);
+                  return Promise.reject("server");
+            }
+      })
+      .then(dataJson => {
+            dataReceived = dataJson; // Already parsed for some reason??
       })
       .catch(err => {
             if (err === "server") return
