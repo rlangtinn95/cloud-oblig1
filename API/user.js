@@ -30,7 +30,7 @@ function handleUpdate(req, res) {
     var query = req.body;
     var filter = query.filter;
     delete query.filter;
-    userModel.findOneAndUpdate(filter, query, (error, user) => {
+    userModel.findOneAndUpdate(filter, query, {new: true}, (error, user) => {
         if(error)
             res.status(500).send({error: error});
         else
