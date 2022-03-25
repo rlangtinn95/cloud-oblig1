@@ -54,6 +54,6 @@ function handleDelete(req, res) {
 module.exports = (app, jsonParser) => {
     app.post('/user', jsonParser, handleCreate);
     app.get('/user', handleRead);
-    app.put('/user', handleUpdate);
-    app.delete('/user', handleDelete);
+    app.put('/user', jsonParser, handleUpdate);
+    app.delete('/user', jsonParser, handleDelete);
 };
