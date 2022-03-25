@@ -7,6 +7,9 @@ const port = process.env.PORT || 80
 app.use(bodyParser.urlencoded({extended: true}));
 var jsonParser = bodyParser.json()
 
+var cors = require('cors');
+app.use(cors());
+
 DBI.initConnection();
 
 // API Endpoints
