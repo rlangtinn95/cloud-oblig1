@@ -15,6 +15,13 @@ DBI.initConnection();
 // API Endpoints
 require('./API/user')(app, jsonParser);
 
+app.use(express.static('client'));
+
+
 app.listen(port, () => {
     console.log(`API Webserver started on port ${port}`);
 });
+
+
+
+
