@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Oblig 1</title> 
+      <script src="client.js"></script>
+</head>
+<body>
+
+      <h1>Please fill in your information below</h1>
+
+      <form onsubmit="formSubmit_Update(this)" id="studentForm">
+
+      <div>
+            <label for="fname">First name:</label>
+            <input type="text" id="fname" name="fname" placeholder="Enter your first name here">
+      </div>     
+      <br>
+      <div>
+            <label for="lname">Last name</label>
+            <input type="text" id="lname" name="lname" placeholder="Enter your last name here">
+
+      </div>
+
+      <br>
+
+      <div>
+
+            <label>Student id </label>  
+            <input type="text" name="student_ID">
+
+      </div>
+
+      <br>
+
+      <div>
+
+            <label for="age">Age</label>
+            <input type="text" id="age" name="age" placeholder="Enter your age here">
+
+      </div>
+
+      <br>
+
+      <div>
+
+            <label for="nationality">Nationality</label>
+            <input type="text" id="nationality" name="nationality" placeholder="Nationality">
+      
+      </div>
+
+      <br>
+
+      <div>
+
+            <label for="degree"></label>
+            <input type="text" id="degree" name="degree" placeholder="Education Program">
+
+
+      </div>
+
+      <br>
+
+      <div> 
+            <label for="submit">Create/Update</label>
+            <input type="submit" id="submit" name="submit">
+
+      </div>
+
+      </form>
+      
+      <a href="/view-feedback">view-feedback</a>
+
+      <p id="latency"></p>
+      
+      <script>
+            const urlParameters = new URLSearchParams(window.location.search);
+            var studentID = urlParameters.get('studentID');
+            if(studentID) {
+                  var preloadInfo = readUser(studentID);
+                  var form = document.getElementById("studentForm");
+
+                  /* form.fname = preloadInfo.user.firstname;
+                  form.lname = preloadInfo.user.surname;
+                  form.student_ID = preloadInfo.user.student_id;
+                  form.age = preloadInfo.user.age;
+                  form.nationality = preloadInfo.user.nationality;
+                  form.degree = preloadInfo.user.degree; */
+            }
+
+            function formSubmit_Update(form) {
+                  var firstname = form.fname;
+                  var surname = form.lname;
+                  var studentid = form.student_ID;
+                  var age = form.age;
+                  var nationality = form.nationality;
+                  var degree = form.degree;
+
+                  var clientSent = Date.now();
+                  var received = updateUser(firstname, surname, studentid, age, nationality, degree);
+                  var timestamps = clientTimestamp(clientSent);
+                  var roundTrip = timestamps.client_latency - received.timestamps.server_latency;
+
+                  document.getElementById("latency").innerHTML = "Latency: "+roundTrip+"ms";
+            }
+      </script>
+
+</body>
+</html>
