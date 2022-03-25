@@ -8,7 +8,7 @@ function handleCreate(req, res) {
 
     user.save()
     .then(() => {
-        res.send({user: user, timestamps: serverTimestamp(receivedTimestamp)})
+        res.status(200).send({user: user, timestamps: serverTimestamp(receivedTimestamp)})
     })
     .catch((error) => {res.status(500).send({error: error})})
 }
@@ -18,7 +18,7 @@ function handleRead(req, res) {
     var query = req.query;
     userModel.find(query).then((user) => {
         try {
-            res.send({user: user, timestamps: serverTimestamp(receivedTimestamp)});
+            res.status(200).send({user: user, timestamps: serverTimestamp(receivedTimestamp)});
         } catch(error) {
             res.status(500).send({error: error});
         }
@@ -34,7 +34,7 @@ function handleUpdate(req, res) {
         if(error)
             res.status(500).send({error: error});
         else
-            res.send({user: user, timestamps: serverTimestamp(receivedTimestamp)});
+            res.status(200).send({user: user, timestamps: serverTimestamp(receivedTimestamp)});
     });
 }
 
@@ -47,7 +47,7 @@ function handleDelete(req, res) {
         if(error)
             res.status(500).send({error: error});
         else
-            res.send({user: "deleted", timestamps: serverTimestamp(receivedTimestamp)});
+            res.status(200).send({user: "deleted", timestamps: serverTimestamp(receivedTimestamp)});
     });
 }
 
