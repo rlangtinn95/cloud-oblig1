@@ -42,8 +42,7 @@ function handleDelete(req, res) {
     var receivedTimestamp = Date.now();
     var query = req.body;
     var filter = query.filter;
-    delete query.filter;
-    userModel.findOneAndDelete(filter, query, (error, user) => {
+    userModel.findOneAndDelete(filter, (error, user) => {
         if(error)
             res.status(500).send({error: error});
         else
