@@ -1,11 +1,14 @@
-const http = require("http");
-const host = 'localhost';
+const express = require("express");
+const bodyParser = require("body-parser");
+const app = express();
 const port = process.env.PORT || 80
 
-function handleRequest(request, response) {
-    response.writeHead(200);
-    response.end("Yooo");
-}
+app.use(bodyParser.urlencoded({extended: true}));
+var jsonParser = bodyParser.json()
 
-const server = http.createServer(handleRequest);
-server.listen(port);
+// API Endpoints
+require('./API/user')(app, jsonParser);
+
+app.listen(port, () => {
+    console.log(`API Webserver started on port ${port}`);
+});
